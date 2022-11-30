@@ -7,13 +7,13 @@ services:
             - "8306:8306"
         command: --default-authentication-plugin=mysql_native_password
         environment:
-            - MYSQL_DATABASE:db1
-            - MYSQL_USER:user
-            - MYSQL_PASSWORD:test
-            - MYSQL_ROOT_PASSWORD:test 
+            MYSQL_DATABASE: db1
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test 
         volumes:
             - ./dump:/docker-entrypoint-initdb.d/admin_instituto.sql
-            - persistent:/var/lib/mysql
+            
         networks:
             - default
 
@@ -39,8 +39,8 @@ services:
         ports:
             - 4040:8080
         environment:
-            - MYSQL_USER:user
-            - MYSQL_PASSWORD:test
-            - MYSQL_ROOT_PASSWORD:test 
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test 
 volumes:
     persistent:
