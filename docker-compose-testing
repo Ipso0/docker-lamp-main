@@ -5,12 +5,15 @@ services:
         build: .
         container_name: www
         ports: 
-            - "127.0.0.1:8080:80"
+            - "8080:80"
         volumes:
             - ./www:/var/www/html
         links:
             - db1
-            
+            - db2
+        depends_on:
+            - db1
+            - db2
         networks:
             - default
         restart: always
@@ -19,7 +22,7 @@ services:
         image: mysql:5.6
         container_name: base_de_datos
         ports: 
-            - "127.0.0.1:8306:8306"
+            - "8306:8306"
         command: 
             - --default-authentication-plugin=mysql_native_password
             - --character-set-server=utf8
@@ -39,14 +42,14 @@ services:
         image: mysql:5.6
         container_name: base_de_datos2
         ports: 
-            - "127.0.0.1:8307:8306"
+            - "8307:8306"
         command: 
             - --default-authentication-plugin=mysql_native_password
             - --character-set-server=utf8
             - --SET @@GLOBAL.sql_mode=ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER
         environment:
             MYSQL_DATABASE: db2
-            MYSQL_USER: user
+            MYSQL_USER: user2
             MYSQL_PASSWORD: test
             MYSQL_ROOT_PASSWORD: test 
         volumes:
@@ -58,15 +61,25 @@ services:
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
-        links:
+        container_name: phpmyadmin_db1
         ports:
-            - "8000:80"
+            - 8000:80
         environment:
-            PMA_HOST: db1
+            - PMA_HOST=db1
         depends_on:
             - db1
+
         restart: always 
-        
+
+    phpmyadmin_db2:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin_db2
+        ports:
+            - 8001:80
+        environment:
+            - PMA_HOST=db2
+        depends_on:
+            - db2
+        restart: always
 volumes:
     persistent:
