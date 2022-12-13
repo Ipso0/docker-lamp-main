@@ -19,7 +19,7 @@ services:
         image: mysql:5.6
         container_name: base_de_datos
         ports: 
-            - 8306:8306
+            - 8306:3306
         command: 
             - --default-authentication-plugin=mysql_native_password
             - --character-set-server=utf8
@@ -36,7 +36,7 @@ services:
         image: mysql:5.6
         container_name: base_de_datos2
         ports: 
-            - 8307:8306
+            - 8307:3306
         command: 
             - --default-authentication-plugin=mysql_native_password
             - --character-set-server=utf8
@@ -52,13 +52,12 @@ services:
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin_db1
+        container_name: phpmyadmin
         ports:
             - 800:80
         links:
             - db1
             - db2
         environment:
-            - PMA_HOST=db1
-            - PMA_HOST_2=db2
+            - PMA_HOSTS=db1,db2
         restart: always
